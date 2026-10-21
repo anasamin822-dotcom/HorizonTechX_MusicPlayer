@@ -236,6 +236,7 @@ html.snap .reveal, html.snap .track-list .track { opacity: 1 !important; transfo
   .track-thumb { width: 44px; height: 44px; }
   .hero-labels span:nth-child(n+3) { display: none; }
   .nav-wrap { padding: 12px 12px 0; }
+  .pill { padding: 10px 14px; }
   main { padding: 0 16px; }
   .footer { padding: 0 16px 32px; }
 }
