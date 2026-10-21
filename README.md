@@ -54,3 +54,12 @@ All 6 tracks were **generated in-house for this project** (procedurally synthesi
     ├── audio/    # 6 generated .mp3 tracks
     └── covers/   # 6 generated .jpg covers
 ```
+
+
+## v2 — Cassette redesign (Oct 21, 2026)
+
+Full visual overhaul following the "Cassette" style reference: ink-black canvas `#19181a`, single hi-vis yellow accent `#f0e226`, bone `#f5f4f0` text, 900px pill UI, JetBrains Mono / Inter type pair, animated film grain, flat bordered surfaces (no gradients or shadows).
+
+- Real 3D headphones hero: CC0 model from [grab3d.com](https://grab3d.com/models/electronics/headphones/) (`assets/models/headphones.glb`, license in `assets/models/LICENSE-headphones.txt`), recolored to monochrome, rendered with `<model-viewer>` (vendored at `js/vendor/model-viewer.min.js`). Slow auto-rotate, mouse parallax, scroll-driven orbit, beat-synced scale while playing.
+- Yellow equalizer bars in hero + footer driven by the live Web Audio analyser.
+- Cover art regenerated as yellow-on-black cassette J-cards.

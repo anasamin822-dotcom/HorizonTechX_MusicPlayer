@@ -4,106 +4,82 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PulsePlay — Music Player</title>
-  <meta name="description" content="PulsePlay: a neon-aurora web music player with live visualizer, playlist, keyboard controls and copyright-free tracks. Built with HTML, CSS and vanilla JavaScript." />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238b5cf6'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='%230a0b1a'/%3E%3Cpath d='M28 62 V44 M40 72 V32 M52 80 V24 M64 68 V38 M76 58 V46' stroke='url(%23g)' stroke-width='8' stroke-linecap='round' fill='none'/%3E%3C/svg%3E" />
+  <meta name="description" content="PulsePlay: a web music player with live visualizer, playlist, keyboard controls and copyright-free tracks. Built with HTML, CSS and vanilla JavaScript." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2319181a'/%3E%3Cg stroke='%23f0e226' stroke-width='10' stroke-linecap='round'%3E%3Cpath d='M50 12 V88 M17 31 L83 69 M17 69 L83 31'/%3E%3C/g%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
-  <!-- ambient background -->
-  <div class="bg" aria-hidden="true">
-    <div class="aurora a1"></div>
-    <div class="aurora a2"></div>
-    <div class="aurora a3"></div>
-    <div class="grid"></div>
-    <canvas id="particles"></canvas>
-  </div>
+<body id="top">
+  <div class="grain" aria-hidden="true"></div>
 
-  <!-- navbar -->
+  <!-- sticky pill nav cluster -->
   <header class="nav-wrap">
-    <nav class="nav glass" aria-label="Main">
-      <a class="brand" href="#top">
-        <svg viewBox="0 0 100 100" class="brand-mark" aria-hidden="true"><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="rgba(255,255,255,.06)"/><path d="M28 62 V44 M40 72 V32 M52 80 V24 M64 68 V38 M76 58 V46" stroke="url(#bg1)" stroke-width="8" stroke-linecap="round" fill="none"/></svg>
-        <span>Pulse<em>Play</em></span>
+    <nav class="nav-cluster" aria-label="Main">
+      <a class="brand-asterisk" href="#top" aria-label="PulsePlay home">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="currentColor" stroke-width="11" stroke-linecap="round"><path d="M50 10 V90 M15 30 L85 70 M15 70 L85 30"/></g></svg>
       </a>
-      <div class="nav-links">
-        <a href="#player">Player</a>
-        <a href="#playlist">Playlist</a>
-        <a href="#features">Features</a>
-      </div>
-      <button class="nav-cta" id="navListen" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
-        Listen
-      </button>
+      <a class="pill" href="#player">Player</a>
+      <a class="pill" href="#playlist">Playlist</a>
+      <a class="pill" href="#features">Features</a>
+      <button class="pill pill-fill" id="navListen" type="button">Listen</button>
     </nav>
   </header>
 
-  <main id="top">
+  <main>
     <!-- hero -->
     <section class="hero">
-      <div class="hero-copy reveal">
-        <span class="badge"><span class="badge-dot"></span> 6 copyright-free tracks · zero ads</span>
-        <h1>Feel every <span class="grad">beat</span>,<br />own every <span class="grad2">moment</span>.</h1>
-        <p class="lede">A hand-crafted web player with a live audio visualizer, buttery animations and a playlist that flows straight into the next track. No sign-up. No cost. Just music.</p>
-        <div class="hero-ctas">
-          <button class="btn-primary glow-border" id="heroPlay" type="button">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
-            Start listening
-          </button>
-          <a class="btn-ghost" href="#playlist">Browse playlist
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
+      <h1 class="wordmark" aria-label="PulsePlay">PULSEPLAY</h1>
+      <div class="hero-labels" aria-hidden="true">
+        <span>HTML</span><span>CSS</span><span>JAVASCRIPT</span><span>ZERO COST</span>
+      </div>
+
+      <div class="hero-grid">
+        <div class="hero-copy reveal">
+          <span class="badge">6 TRACKS<br />COPYRIGHT-FREE</span>
+          <h2 class="hero-heading">FEEL EVERY <span class="hl">BEAT</span>,<br />OWN EVERY MOMENT.</h2>
+          <p class="lede">A HAND-BUILT WEB PLAYER WITH A LIVE AUDIO VISUALIZER, A REAL 3D HERO AND A PLAYLIST THAT ROLLS STRAIGHT INTO THE NEXT TRACK. NO SIGN-UP. NO COST. JUST MUSIC.</p>
+          <div class="hero-ctas">
+            <button class="pill pill-fill big" id="heroPlay" type="button">Start listening</button>
+            <a class="pill big" href="#playlist">Browse playlist</a>
+          </div>
+          <div class="hero-stats">
+            <span>06 TRACKS</span>
+            <span>04 MIN OF MUSIC</span>
+            <span>100% FREE</span>
+          </div>
         </div>
-        <div class="hero-stats">
-          <div><strong>6</strong><span>tracks</span></div>
-          <div><strong>4<span class="thin">min</span></strong><span>of music</span></div>
-          <div><strong>100%</strong><span>free forever</span></div>
+
+        <div class="hero-art reveal" aria-hidden="true">
+          <div class="hero-model-wrap" id="heroModelWrap">
+            <model-viewer id="heroModel" class="hero-model" src="assets/models/headphones.glb"
+              alt="Realistic 3D headphones" loading="eager"
+              camera-orbit="-25deg 72deg 105%" min-camera-orbit="auto auto 100%" max-camera-orbit="auto auto 130%"
+              disable-zoom interaction-prompt="none" auto-rotate rotation-per-second="9deg"
+              shadow-intensity="1.2" exposure="1.1" environment-image="neutral"
+              touch-action="pan-y"></model-viewer>
+          </div>
         </div>
       </div>
 
-      <div class="hero-art reveal" aria-hidden="true">
-        <div class="halo"></div>
-        <div class="halo h2"></div>
-        <div class="headphones float">
-          <svg viewBox="0 0 220 200">
-            <defs>
-              <linearGradient id="hp1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
-              <linearGradient id="hp2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b2350"/><stop offset="1" stop-color="#12102a"/></linearGradient>
-              <linearGradient id="hp3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#ec4899"/></linearGradient>
-            </defs>
-            <path d="M35 130 v-25 a75 75 0 0 1 150 0 v25" fill="none" stroke="url(#hp1)" stroke-width="16" stroke-linecap="round"/>
-            <rect x="18" y="120" width="44" height="66" rx="20" fill="url(#hp2)" stroke="url(#hp1)" stroke-width="3"/>
-            <rect x="158" y="120" width="44" height="66" rx="20" fill="url(#hp2)" stroke="url(#hp1)" stroke-width="3"/>
-            <ellipse cx="40" cy="140" rx="8" ry="16" fill="url(#hp3)" opacity=".9"/>
-            <ellipse cx="180" cy="140" rx="8" ry="16" fill="url(#hp3)" opacity=".9"/>
-            <ellipse cx="60" cy="70" rx="30" ry="10" fill="#ffffff" opacity=".14" transform="rotate(-30 60 70)"/>
-          </svg>
-        </div>
-        <div class="orbit-chip chip1">FLAC-quality vibes</div>
-        <div class="orbit-chip chip2">Live visualizer</div>
-        <div class="orbit-chip chip3">Keyboard control</div>
+      <div class="hero-eq" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
       </div>
-
-      <a class="scroll-cue" href="#player" aria-label="Scroll to player">
-        <span></span>
-      </a>
     </section>
 
     <!-- player -->
     <section id="player" class="player-section">
-      <h2 class="section-title reveal">Now <span class="grad">playing</span></h2>
-      <p class="section-sub reveal">Tap a card in the playlist or hit play — the visualizer listens with you.</p>
+      <span class="badge reveal">NOW PLAYING<br />THE DECK</span>
+      <h2 class="section-title reveal">Now <span class="hl">playing</span></h2>
+      <p class="section-sub reveal">TAP A ROW IN THE PLAYLIST OR HIT PLAY — THE VISUALIZER LISTENS WITH YOU.</p>
 
-      <div class="player-card glass reveal" id="tiltCard">
+      <div class="player-card reveal" id="tiltCard">
         <div class="disc-wrap">
           <div class="disc" id="disc">
             <img id="coverArt" src="assets/covers/midnight-drive.jpg" alt="Album cover of the current track" />
-            <div class="disc-grooves"></div>
-            <div class="disc-hole"></div>
           </div>
-          <div class="disc-glow"></div>
+          <svg class="play-star" viewBox="0 0 100 100" aria-hidden="true"><g stroke="currentColor" stroke-width="11" stroke-linecap="round"><path d="M50 10 V90 M15 30 L85 70 M15 70 L85 30"/></g></svg>
         </div>
 
         <div class="controls-col">
@@ -127,7 +103,7 @@
             <button class="ctrl" id="btnPrev" type="button" aria-label="Previous track" title="Previous">
               <svg viewBox="0 0 24 24"><path d="M19 20 9 12l10-8zM7 5H5v14h2z" fill="currentColor"/></svg>
             </button>
-            <button class="ctrl play glow-border" id="btnPlay" type="button" aria-label="Play" title="Play / pause (Space)">
+            <button class="ctrl play" id="btnPlay" type="button" aria-label="Play" title="Play / pause (Space)">
               <svg class="ic-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
               <svg class="ic-pause" viewBox="0 0 24 24" style="display:none"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>
             </button>
@@ -149,39 +125,41 @@
           </div>
         </div>
       </div>
-      <p class="kbd-hint reveal">Shortcuts: <kbd>Space</kbd> play/pause · <kbd>←</kbd><kbd>→</kbd> prev/next · <kbd>↑</kbd><kbd>↓</kbd> volume</p>
+      <p class="kbd-hint reveal">SHORTCUTS — <kbd>SPACE</kbd> PLAY/PAUSE · <kbd>&#8592;</kbd><kbd>&#8594;</kbd> PREV/NEXT · <kbd>&#8593;</kbd><kbd>&#8595;</kbd> VOLUME</p>
     </section>
 
     <!-- playlist -->
     <section id="playlist" class="playlist-section">
-      <h2 class="section-title reveal">The <span class="grad2">playlist</span></h2>
-      <p class="section-sub reveal">Six original tracks, generated in-house. Autoplay rolls into the next one.</p>
+      <span class="badge reveal">THE PLAYLIST<br />SIDE A</span>
+      <h2 class="section-title reveal">Six <span class="hl">original</span> tracks</h2>
+      <p class="section-sub reveal">GENERATED IN-HOUSE, COPYRIGHT-FREE. AUTOPLAY ROLLS INTO THE NEXT ONE.</p>
       <ul class="track-list" id="trackList"></ul>
     </section>
 
     <!-- features -->
     <section id="features" class="features-section">
-      <h2 class="section-title reveal">Built to <span class="grad">feel alive</span></h2>
+      <span class="badge reveal">WHY PULSEPLAY<br />THE SPEC SHEET</span>
+      <h2 class="section-title reveal">Built to <span class="hl">feel alive</span></h2>
       <div class="feature-grid">
-        <article class="feature-card glass reveal">
+        <article class="feature-card reveal">
           <div class="f-icon">
-            <svg viewBox="0 0 48 48"><defs><linearGradient id="fg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs><rect x="4" y="4" width="40" height="40" rx="12" fill="url(#fg1)" opacity=".18"/><path d="M12 28v-8M19 34V14M26 38V10M33 30V18M40 26v-4" stroke="url(#fg1)" stroke-width="4" stroke-linecap="round" fill="none"/></svg>
+            <svg viewBox="0 0 48 48"><path d="M10 28v-8M18 34V14M26 38V10M34 30V18M42 26v-4" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/></svg>
           </div>
-          <h3>Live visualizer</h3>
-          <p>A Web Audio analyser paints real frequency bars on a neon canvas while the track plays.</p>
+          <h3>LIVE VISUALIZER</h3>
+          <p>A Web Audio analyser paints real frequency bars while the track plays.</p>
         </article>
-        <article class="feature-card glass reveal">
+        <article class="feature-card reveal">
           <div class="f-icon">
-            <svg viewBox="0 0 48 48"><defs><linearGradient id="fg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ec4899"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect x="4" y="4" width="40" height="40" rx="12" fill="url(#fg2)" opacity=".18"/><path d="M10 14h28M10 24h28M10 34h16" stroke="url(#fg2)" stroke-width="4" stroke-linecap="round"/><circle cx="36" cy="34" r="5" fill="none" stroke="url(#fg2)" stroke-width="3"/><path d="M41 34V22l4-2" stroke="url(#fg2)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+            <svg viewBox="0 0 48 48"><path d="M10 14h28M10 24h28M10 34h16" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/><circle cx="36" cy="34" r="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M41 34V22l4-2" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
           </div>
-          <h3>Smart playlist</h3>
-          <p>Autoplay, shuffle and repeat-one. Tap any row and the player jumps straight to it.</p>
+          <h3>SMART PLAYLIST</h3>
+          <p>Autoplay, shuffle and repeat-one. Tap any row and the player jumps to it.</p>
         </article>
-        <article class="feature-card glass reveal">
+        <article class="feature-card reveal">
           <div class="f-icon">
-            <svg viewBox="0 0 48 48"><defs><linearGradient id="fg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#a3e635"/></linearGradient></defs><rect x="4" y="4" width="40" height="40" rx="12" fill="url(#fg3)" opacity=".18"/><rect x="9" y="16" width="30" height="18" rx="4" fill="none" stroke="url(#fg3)" stroke-width="3"/><path d="M14 22h2m4 0h2m4 0h2m4 0h2M14 28h16" stroke="url(#fg3)" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <svg viewBox="0 0 48 48"><rect x="9" y="16" width="30" height="18" fill="none" stroke="currentColor" stroke-width="3"/><path d="M14 22h2m4 0h2m4 0h2m4 0h2M14 28h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
           </div>
-          <h3>Keyboard control</h3>
+          <h3>KEYBOARD CONTROL</h3>
           <p>Space to play, arrows to skip and mix the volume — no mouse required.</p>
         </article>
       </div>
@@ -189,24 +167,24 @@
   </main>
 
   <footer class="footer">
-    <div class="foot-inner glass">
+    <div class="hero-eq foot-eq" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <div class="foot-inner">
       <div class="foot-brand">
-        <strong>Pulse<em>Play</em></strong>
-        <p>A vanilla JS music player · Horizon TechX frontend internship, Task 4.</p>
-      </div>
-      <div class="foot-links">
-        <a href="#player">Player</a>
-        <a href="#playlist">Playlist</a>
-        <a href="#features">Features</a>
+        <svg viewBox="0 0 100 100" class="brand-asterisk foot-mark" aria-hidden="true"><g stroke="currentColor" stroke-width="11" stroke-linecap="round"><path d="M50 10 V90 M15 30 L85 70 M15 70 L85 30"/></g></svg>
+        <p>A VANILLA JS MUSIC PLAYER · HORIZON TECHX FRONTEND INTERNSHIP, TASK 4.</p>
       </div>
       <div class="foot-credit">
-        <p>All six tracks are generated in-house and copyright-free. Cover art generated for this project.</p>
-        <p class="tiny">HTML · CSS · JavaScript — no frameworks, no build step.</p>
+        <p>ALL SIX TRACKS ARE GENERATED IN-HOUSE AND COPYRIGHT-FREE. COVER ART GENERATED FOR THIS PROJECT.</p>
+        <p>HTML · CSS · JAVASCRIPT — NO FRAMEWORKS, NO BUILD STEP.</p>
+        <p>3D HEADPHONES MODEL: GRAB3D.COM (CC0 LICENSE).</p>
       </div>
     </div>
   </footer>
 
   <audio id="audio" preload="metadata"></audio>
+  <script type="module" src="js/vendor/model-viewer.min.js"></script>
   <script src="js/script.js"></script>
 </body>
 </html>

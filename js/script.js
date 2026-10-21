@@ -206,6 +206,33 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+/* ---------- hero music-pulse ---------- */
+const heroArt = document.querySelector(".hero-art");
+const heroEqBars = [...document.querySelectorAll(".hero-eq i")];
+let beatSmooth = 0;
+function driveHeroPulse(levels, t) {
+  if (!heroArt) return;
+  let bass;
+  if (levels) {
+    bass = (levels[1] + levels[2] + levels[3] + levels[4]) / (4 * 255);
+    heroEqBars.forEach((b, i) => {
+      const v = levels[2 + Math.floor((i / heroEqBars.length) * levels.length * 0.7)] / 255;
+      b.style.setProperty("--h", (6 + v * 36).toFixed(0));
+    });
+  } else {
+    bass = isPlaying ? Math.max(0, Math.sin(t * 4.4)) * 0.7 + 0.15 : 0.12;
+    heroEqBars.forEach((b, i) => {
+      const v = isPlaying
+        ? 0.5 + 0.5 * Math.sin(t * 5 + i * 0.8)
+        : 0.25 + 0.2 * Math.sin(t * 1.5 + i);
+      b.style.setProperty("--h", (6 + v * 30).toFixed(0));
+    });
+  }
+  beatSmooth += (bass - beatSmooth) * 0.25;
+  heroArt.style.setProperty("--beat", beatSmooth.toFixed(3));
+  heroArt.classList.toggle("playing", isPlaying);
+}
+
 /* ---------- visualizer ---------- */
 let actx = null, analyser = null, freqData = null, vizLive = false, vizFrames = 0;
 function initAnalyser() {
@@ -229,6 +256,7 @@ function drawViz() {
   if (viz.width !== w) { viz.width = w; viz.height = h; }
   const ctx = viz.getContext("2d");
   ctx.clearRect(0, 0, w, h);
+  const t = performance.now() / 1000;
   const bars = 48, gap = 3 * dpr, bw = (w - gap * (bars - 1)) / bars;
 
   let levels = null;
@@ -241,13 +269,10 @@ function drawViz() {
     levels = freqData;
   }
 
-  const grad = ctx.createLinearGradient(0, h, w, 0);
-  grad.addColorStop(0, "#8b5cf6");
-  grad.addColorStop(0.55, "#22d3ee");
-  grad.addColorStop(1, "#ec4899");
-  ctx.fillStyle = grad;
+  driveHeroPulse(levels, t);
 
-  const t = performance.now() / 1000;
+  ctx.fillStyle = "#f0e226";
+
   for (let i = 0; i < bars; i++) {
     let v;
     if (levels) {
@@ -289,38 +314,59 @@ const io = new IntersectionObserver((entries) => {
 document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 io.observe(listEl);
 
-/* ---------- particles ---------- */
-const pc = document.getElementById("particles");
-const pctx = pc.getContext("2d");
-let pts = [];
-function sizeParticles() {
-  pc.width = innerWidth; pc.height = innerHeight;
-  const n = Math.min(70, Math.floor(innerWidth / 22));
-  pts = Array.from({ length: n }, () => ({
-    x: Math.random() * pc.width, y: Math.random() * pc.height,
-    r: Math.random() * 1.8 + 0.5, s: Math.random() * 0.35 + 0.08,
-    o: Math.random() * 0.5 + 0.15, ph: Math.random() * Math.PI * 2,
-  }));
-}
-sizeParticles();
-addEventListener("resize", sizeParticles);
-(function tickParticles() {
-  requestAnimationFrame(tickParticles);
-  pctx.clearRect(0, 0, pc.width, pc.height);
-  const t = performance.now() / 1000;
-  for (const p of pts) {
-    p.y -= p.s; if (p.y < -4) { p.y = pc.height + 4; p.x = Math.random() * pc.width; }
-    const tw = 0.55 + 0.45 * Math.sin(t * 1.4 + p.ph);
-    pctx.beginPath();
-    pctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    pctx.fillStyle = `rgba(167, 139, 250, ${p.o * tw})`;
-    pctx.fill();
-  }
-})();
-
 /* screenshot helper mode */
 if (location.search.includes("snap")) document.documentElement.classList.add("snap");
 
 /* ---------- go ---------- */
 load(0);
 markActive();
+
+
+/* ---------- v2: 3D hero — scroll orbit + parallax + float + beat ---------- */
+const heroModelWrap = document.getElementById("heroModelWrap");
+const heroModel = document.getElementById("heroModel");
+const heroSection = document.querySelector(".hero");
+const heroCopy = document.querySelector(".hero-copy");
+const finePointer = matchMedia("(pointer: fine)").matches;
+
+if (heroModelWrap && heroModel && heroSection) {
+  const state = { px: 0, py: 0, cx: 0, cy: 0, progress: 0 };
+
+  let scrollTicking = false;
+  function heroScrollOrbit() {
+    scrollTicking = false;
+    const rect = heroSection.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > innerHeight) return;
+    const p = Math.min(1, Math.max(0, scrollY / (heroSection.offsetHeight * 0.9)));
+    state.progress = p;
+    heroModel.autoRotate = p < 0.02;
+    if (p >= 0.02) heroModel.cameraOrbit = `${(-25 + p * 150).toFixed(1)}deg ${(72 - p * 10).toFixed(1)}deg 105%`;
+  }
+  addEventListener("scroll", () => {
+    if (!scrollTicking) { scrollTicking = true; requestAnimationFrame(heroScrollOrbit); }
+  }, { passive: true });
+
+  if (finePointer) {
+    heroSection.addEventListener("mousemove", (e) => {
+      const r = heroSection.getBoundingClientRect();
+      state.px = ((e.clientX - r.left) / r.width - 0.5) * 2;
+      state.py = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    });
+  }
+
+  (function heroLoop(t) {
+    const time = (t || 0) / 1000;
+    state.cx += (state.px - state.cx) * 0.06;
+    state.cy += (state.py - state.cy) * 0.06;
+    const beatScale = 1 + beatSmooth * 0.045;
+    const floatY = Math.sin(time * 1.15) * 9;
+    const x = state.cx * 14;
+    const y = floatY + state.cy * 10 + state.progress * 46;
+    heroModelWrap.style.transform =
+      `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${beatScale})`;
+    if (heroCopy && finePointer) {
+      heroCopy.style.transform = `translate(${(state.cx * -5).toFixed(2)}px, ${(state.cy * -3).toFixed(2)}px)`;
+    }
+    requestAnimationFrame(heroLoop);
+  })();
+}
